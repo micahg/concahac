@@ -32,10 +32,13 @@ while True:
                     else:
                         stats[option['OptionKey']] = stats[option['OptionKey']] + option['OptionTotalVotes']
             total_votes = 0
+            max_votes = 0
             for (key, val) in stats.items():
                 # print('{} = {}'.format(key, val))
                 total_votes = total_votes + val
+                if val > max_votes:
+                    max_votes = val
             rigged_name = vote['answerText']
             rigged_votes = stats[vote['answerKey']]
             percentage_votes = rigged_votes / total_votes
-            print('{} has {} of {} ({})'.format(rigged_name, rigged_votes, total_votes, percentage_votes))
+            print('{} has {} of {} ({} - max {})'.format(rigged_name, rigged_votes, total_votes, percentage_votes, max_votes))
