@@ -24,7 +24,13 @@ while True:
             print('ERROR: unable to cast vote. status {} - {}'.format(resp.status_code, resp.content))
         else:
             stats = {}
-            js_obj = json.loads(resp.content)
+            js_obj = None
+            try:
+                js_obj = json.loads(resp.content)
+            except ValueError:
+                print('ERROR parsing json resposne - who cares')
+                continue
+
             for culture in js_obj['LangInfo']:
                 for option in culture['PollOptionList']:
                     if not option['OptionKey'] in stats:
@@ -40,5 +46,5 @@ while True:
                     max_votes = val
             rigged_name = vote['answerText']
             rigged_votes = stats[vote['answerKey']]
-            percentage_votes = rigged_votes / total_votes
+            percentage_votes = rigged_votes / total_votes * 100
             print('{} has {} of {} ({} - max {})'.format(rigged_name, rigged_votes, total_votes, percentage_votes, max_votes))
